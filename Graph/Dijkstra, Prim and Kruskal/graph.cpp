@@ -2,7 +2,6 @@
 #include <list>
 #include <vector>
 #include <map>
-#include <cstdio>
 
 using std::string;
 using std::list;
