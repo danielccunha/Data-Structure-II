@@ -14,8 +14,8 @@ struct Vertex
 
 class Graph
 {
-    int V;              // Número de vértices
-    list<Vertex> *adj;  // Lista de vértices
+    int V;          // Número de vértices
+    Vertex *adj;    // Lista de vértices
 
 public:
     Graph(int V);    // Constructor
@@ -24,5 +24,5 @@ public:
 Graph::Graph(int V)
 {
     this->V = V;
-    this->adj = new list<Vertex>[V];
+    this->adj = new Vertex[V];
 }
