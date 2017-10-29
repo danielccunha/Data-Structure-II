@@ -50,6 +50,7 @@ public:
     Graph(int V);    // Constructor
     void addVertex(int index, string label);    // Adiciona um vértice ao grafo
     void addEdge(string label, string orig, string dest, int weight); // Adiciona uma aresta ao grafo
+    void dijkstra(string source, string dest);  // Executa o algoritmo de 
 };
 
 Graph::Graph(int V)
@@ -77,4 +78,9 @@ void Graph::addEdge(string label, string orig, string dest, int weight)
 
     list[i].adj.push_back(getNewEdge(label, j, weight));
     list[j].adj.push_back(getNewEdge(label, i, weight));
+}
+
+void Graph::dijkstra(string source, string dest)
+{
+    
 }
