@@ -1,12 +1,9 @@
 #include "graph.cpp"
-#include <iostream>
 #include <fstream>
 #include <functional>
 #include <set>
 
 using std::set;
-using std::cin;
-using std::cout;
 using std::ifstream;
 
 // Arquivo de entrada do grafo
@@ -87,7 +84,7 @@ void dijkstra()
     cout << "Destino: ";
     cin  >> dest;
 
-    // g->dijkstra(source, dest);
+    g->dijkstra(source, dest);
 }
 
 // Chama o método Prim

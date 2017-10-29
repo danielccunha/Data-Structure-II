@@ -1,11 +1,12 @@
-4
-aa
-bb
-cc
-dd
 5
-V0 aa bb 10
-V1 aa dd 15
-V2 aa cc 20
-V3 bb cc 25
-V4 cc dd 30
+A
+B
+C
+D
+E
+5
+V0 A B 7
+V1 A E 2
+V2 B C 3
+V3 B D 1
+V4 D E 3
