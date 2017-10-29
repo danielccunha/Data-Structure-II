@@ -1,36 +1,21 @@
-#include "graph.cpp"
-#include <iostream>
-
-using namespace std;
+#include "interface.cpp"
+#include <set>
+using std::set;
 
 int main()
 {
-    int V, E;
-    string label;
+    char option;
+    set<char> validOptions{'L', 'D', 'P', 'K', 'M'};
 
-    cout << "Number of vertex: ";
-    cin  >> V;
-    Graph g(V);
-
-    for(int i = 0; i < V; ++i)
+    menu();
+    while(cout << "\nOpção: " && cin >> option && option != 'F')
     {
-        cin >> label;
-        g.addVertex(i, label);
-    }
-
-    for(int i = 0; i < V; ++i)
-        cout << "List[" << g.list[i].index << "] = " << g.list[i].label << endl;
-    
-    cout << "Number of edges: ";
-    cin  >> E;
-
-    string orig, dest;
-    int weight;
-
-    while(E--)
-    {
-        cin >> label >> orig >> dest >> weight;
-        g.addEdge(label, orig, dest, weight);
+        if(!validOptions.count(option)) // Caso o caracter lido não for encontrado no Set
+            cout << "Opção inválida.\n";
+        else
+        {
+            // Chamar função
+        }
     }
 
     return 0;

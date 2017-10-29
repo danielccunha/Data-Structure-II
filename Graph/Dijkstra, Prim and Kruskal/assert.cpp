@@ -1,8 +1,6 @@
 // Algoritmo feito com o intuito de validar as funções do grafo
 #include "graph.cpp"
 #include <cassert>
-#include <iostream>
-using namespace std;
 
 int main()
 {
