@@ -1,5 +1,7 @@
 #include "interface.cpp"
 #include <set>
+#include <cassert>
+
 using std::set;
 
 int main()
@@ -13,9 +15,7 @@ int main()
         if(!validOptions.count(option)) // Caso o caracter lido não for encontrado no Set
             cout << "Opção inválida.\n";
         else
-        {
-            // Chamar função
-        }
+            function[option]();
     }
 
     return 0;
