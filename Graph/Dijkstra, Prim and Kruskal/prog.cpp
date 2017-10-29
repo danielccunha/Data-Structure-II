@@ -42,7 +42,7 @@ int main()
 // Imprime o menu de opções
 void menu()
 {
-    cout << "\tMENU\n";
+    cout << "\n\tMENU\n";
     cout << "L - Leitura\tD - Dijkstra\n";
     cout << "P - Prim\tK - Kruskal\n";
     cout << "M - Menu\tF - Fim\n";
@@ -83,7 +83,7 @@ void dijkstra()
     cin  >> source;
     cout << "Destino: ";
     cin  >> dest;
-
+    
     g->dijkstra(source, dest);
 }
 

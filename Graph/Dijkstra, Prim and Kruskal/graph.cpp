@@ -138,6 +138,9 @@ void Graph::dijkstra(string source, string dest)
         v = shorterDist(table); // Pega o índice do vértice com menor custo
         table[v].visited = true;
 
+        // Caso índice com o menor custo seja o destino, ele sai do laço
+        if(list[v].label == dest) break;
+
         for(auto it = list[v].adj.begin(); it != list[v].adj.end(); ++it)
         {
             n = it->d; // Índice do vértice destino
@@ -156,12 +159,15 @@ void Graph::dijkstra(string source, string dest)
 
     // Imprimir a tabela com os dados
     cout << "\nDijkstra: " << source << " to " << dest << endl;
-    cout << "Rótulo\tCusto\tCaminho\n";
+    cout << "Rótulo\tVisitado\tCusto\tCaminho\n";
     for(int i = 0; i < V; ++i)
     {
-        cout << list[i].label << "\t" << table[i].dist << "\t";
-        if(list[i].label == source) // Caso seja a origem
-            cout << "ORIGEM\n";
+        cout << list[i].label << "\t";
+        (table[i].visited) ? cout << "TRUE\t\t" : cout << "FALSE\t\t";
+        (table[i].dist != INF) ? cout << table[i].dist << "\t" : cout << "INF\t";
+        
+        if(table[i].previous == -1) // Caso seja a origem ou não foi visitado
+            (list[i].label == source) ? cout << "ORIGEM\n" : cout << "NULL\n";
         else
         {
             aux = table[i].previous;
