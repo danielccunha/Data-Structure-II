@@ -32,14 +32,21 @@ struct Vertex
 struct Edge
 {
     string label;   // Rótulo
-    int w;          // Weight/Peso
-    int d;          // Destiny/Destino -> índice do vértice destino na lista de vértices
+    int w;          // Peso
+    int o;          // Origem  -> índice do vértice origem
+    int d;          // Destino -> índice do vértice destino na lista de vértices
 
-    Edge(string label, int index, int weight)
+    Edge(string label, int origin, int dest, int weight)
     {
         this->label = label;
-        this->d     = index;
+        this->o     = origin;
+        this->d     = dest;
         this->w     = weight;
+    }
+
+    bool operator<(const Edge& tmp) const
+    {
+        return w > tmp.w;
     }
 };
 
@@ -49,17 +56,21 @@ class Graph
 
 protected:
     struct dijkstraUtil;
-    Edge getNewEdge(string label, int destiny, int weight); // Função auxiliar para adicionar uma aresta ao grafo
-    int shorterDist(dijkstraUtil table[]); // Função auxiliar para encontrar o índice não finalizado com menor custo da tabela no algoritmo de dijkstra
+    struct primUtil;
+    Edge getNewEdge(string label, int origin, int destiny, int weight); // Função auxiliar para adicionar uma aresta ao grafo
+    int  shorterDist(dijkstraUtil table[]); // Função auxiliar para encontrar o índice não finalizado com menor custo da tabela no algoritmo de dijkstra
 
 public:
-    vector<Vertex> list;        // Lista de vértices
-    map<string, int> indexUtil; // Map auxiliar para armazenar o índice do vértice na lista de vértices
+    vector<Vertex> list;         // Lista de vértices
+    vector<Edge>   edgeList;
+    map<string, int> vertexUtil; // Map auxiliar para armazenar o índice do vértice na lista de vértices
+    map<string, int> edgeUtil;   // Map auxiliar para armazenar o índice da aresta na lista de arestas
 
     Graph(int V);    // Constructor
     void addVertex(int index, string label);    // Adiciona um vértice ao grafo
-    void addEdge(string label, string orig, string dest, int weight); // Adiciona uma aresta ao grafo
+    void addEdge(int index, string label, string orig, string dest, int weight); // Adiciona uma aresta ao grafo
     void dijkstra(string source, string dest);  // Executa o algoritmo de 
+    void prim(string source);
 };
 
 Graph::Graph(int V)
@@ -71,42 +82,26 @@ void Graph::addVertex(int index, string label)
 {
     Vertex tmp(index, label);
     list.push_back(tmp);
-    indexUtil[label] = index;
+    vertexUtil[label] = index;
 }
 
-Edge Graph::getNewEdge(string label, int destiny, int weight)
+Edge Graph::getNewEdge(string label, int origin, int destiny, int weight)
 {
-    Edge tmp(label, destiny, weight);
+    Edge tmp(label, origin, destiny, weight);
     return tmp;
 }
 
-void Graph::addEdge(string label, string orig, string dest, int weight)
+void Graph::addEdge(int index, string label, string orig, string dest, int weight)
 {
     // Índices dos vértices
-    int i = indexUtil[orig], j = indexUtil[dest];
+    int i = vertexUtil[orig], j = vertexUtil[dest];
 
-    list[i].adj.push_back(getNewEdge(label, j, weight));
-    list[j].adj.push_back(getNewEdge(label, i, weight));
+    list[i].adj.push_back(getNewEdge(label, i, j, weight));
+    list[j].adj.push_back(getNewEdge(label, j ,i, weight));
+
+    edgeList.push_back(getNewEdge(label, i, j, weight));
+    edgeUtil[label] = index;
 }
-
-/*
-   	function Dijkstra(Graph, source):
-     	for each vertex v in Graph: 	// Initialization
- 	        dist[v] := infinity 	// initial distance from source to vertex v is set to infinite
-	        previous[v] := undefined 	// Previous node in optimal path from source
-         
-        dist[source] := 0 	// Distance from source to source
- 	    Q := the set of all nodes in Graph 	// all nodes in the graph are unoptimized - thus are in Q
- 	    while Q is not empty: 	// main loop
- 	        u := node in Q with smallest dist[ ]
- 	        remove u from Q
- 	        for each neighbor v of u: 	// where v has not yet been removed from Q.
- 	        alt := dist[u] + dist_between(u, v)
- 	        if alt < dist[v] 	// Relax (u,v)
- 	            dist[v] := alt
- 	            previous[v] := u
- 	    return previous[ ] 
-*/
 
 // Estrutura auxiliar para a execução do algoritmo de Dijkstra
 struct Graph::dijkstraUtil
@@ -114,7 +109,7 @@ struct Graph::dijkstraUtil
     int dist, previous;
     bool visited;
 
-    dijkstraUtil() // Para cada nodo do grafo
+    dijkstraUtil()       // Para cada nodo do grafo
     {
         dist = INF;      // Declara o custo dele como infinito
         previous = -1;   // O índice do seu anterior como inválido
@@ -127,7 +122,7 @@ void Graph::dijkstra(string source, string dest)
     // Distância (custo) da origem, índice do vértice que o antecede no caminho e uma flag para caso tenho sido finalizado
     dijkstraUtil table[V];
 
-    int v = indexUtil[source];  // Acha o índice da origem
+    int v = vertexUtil[source];  // Acha o índice da origem
     table[v].dist = 0; // Zera o custo da origem
 
     int rest = V; // Variável de controle para executar o método enquanto houve nodo a ser visitado
@@ -193,4 +188,17 @@ int Graph::shorterDist(dijkstraUtil table[])
         }
 
     return i;
+}
+
+// Estrutura auxiliar para a execução do algoritmo de Prim
+struct Graph::primUtil
+{
+
+};
+
+void Graph::prim(string source)
+{
+    // int table[V];
+    // int i = vertexUtil[source];
+    // table[i] = 0;
 }

@@ -2,6 +2,7 @@
 #include <fstream>
 #include <functional>
 #include <set>
+#include <cctype>
 
 using std::set;
 using std::ifstream;
@@ -28,8 +29,9 @@ int main()
     set<char> validOptions{'L', 'D', 'P', 'K', 'M'};
 
     menu();
-    while(cout << "\nOpção: " && cin >> option && option != 'F')
+    while(cout << "\nOpção: " && cin >> option && option != 'F' && option != 'f')
     {
+        option = toupper(option);
         if(!validOptions.count(option)) // Caso o caracter lido não for encontrado no Set
             cout << "Opção inválida.\n";
         else
@@ -68,10 +70,10 @@ void leitura()
     string orig, dest;
     int weight;
 
-    while(E--)  // Lê as arestas
+    for(int i = 0; i < E; ++i)  // Lê as arestas
     {
         input >> label >> orig >> dest >> weight;
-        g->addEdge(label, orig, dest, weight);
+        g->addEdge(i, label, orig, dest, weight);
     }
 }
 
