@@ -3,6 +3,7 @@
 #include <list>
 #include <vector>
 #include <map>
+#include <queue>
 #include <climits>      // INT_MAX
 
 #define INF INT_MAX // Constante infita para o método Dijkstra
@@ -14,6 +15,7 @@ using std::string;
 using std::list;
 using std::vector;
 using std::map;
+using std::priority_queue;
 
 struct Edge;
 struct Vertex
@@ -61,7 +63,7 @@ protected:
     int  shorterDist(dijkstraUtil table[]); // Função auxiliar para encontrar o índice não finalizado com menor custo da tabela no algoritmo de dijkstra
 
 public:
-    vector<Vertex> list;         // Lista de vértices
+    vector<Vertex> vertexList;         // Lista de vértices
     vector<Edge>   edgeList;
     map<string, int> vertexUtil; // Map auxiliar para armazenar o índice do vértice na lista de vértices
     map<string, int> edgeUtil;   // Map auxiliar para armazenar o índice da aresta na lista de arestas
@@ -81,7 +83,7 @@ Graph::Graph(int V)
 void Graph::addVertex(int index, string label)
 {
     Vertex tmp(index, label);
-    list.push_back(tmp);
+    vertexList.push_back(tmp);
     vertexUtil[label] = index;
 }
 
@@ -96,8 +98,8 @@ void Graph::addEdge(int index, string label, string orig, string dest, int weigh
     // Índices dos vértices
     int i = vertexUtil[orig], j = vertexUtil[dest];
 
-    list[i].adj.push_back(getNewEdge(label, i, j, weight));
-    list[j].adj.push_back(getNewEdge(label, j ,i, weight));
+    vertexList[i].adj.push_back(getNewEdge(label, i, j, weight));
+    vertexList[j].adj.push_back(getNewEdge(label, j ,i, weight));
 
     edgeList.push_back(getNewEdge(label, i, j, weight));
     edgeUtil[label] = index;
@@ -134,9 +136,9 @@ void Graph::dijkstra(string source, string dest)
         table[v].visited = true;
 
         // Caso índice com o menor custo seja o destino, ele sai do laço
-        if(list[v].label == dest) break;
+        if(vertexList[v].label == dest) break;
 
-        for(auto it = list[v].adj.begin(); it != list[v].adj.end(); ++it)
+        for(auto it = vertexList[v].adj.begin(); it != vertexList[v].adj.end(); ++it)
         {
             n = it->d; // Índice do vértice destino
             if(!table[n].visited)
@@ -157,19 +159,19 @@ void Graph::dijkstra(string source, string dest)
     cout << "Rótulo\tVisitado\tCusto\tCaminho\n";
     for(int i = 0; i < V; ++i)
     {
-        cout << list[i].label << "\t";
+        cout << vertexList[i].label << "\t";
         (table[i].visited) ? cout << "TRUE\t\t" : cout << "FALSE\t\t";
         (table[i].dist != INF) ? cout << table[i].dist << "\t" : cout << "INF\t";
         
         if(table[i].previous == -1) // Caso seja a origem ou não foi visitado
-            (list[i].label == source) ? cout << "ORIGEM\n" : cout << "NULL\n";
+            (vertexList[i].label == source) ? cout << "ORIGEM\n" : cout << "NULL\n";
         else
         {
             aux = table[i].previous;
 
             while(aux != -1)
             {
-                cout << list[aux].label;
+                cout << vertexList[aux].label;
                 aux = table[aux].previous;
                 (aux == -1) ? cout << "\n" : cout << " ";
             }
@@ -193,12 +195,33 @@ int Graph::shorterDist(dijkstraUtil table[])
 // Estrutura auxiliar para a execução do algoritmo de Prim
 struct Graph::primUtil
 {
+    bool visited;
 
+    primUtil()
+    {
+        visited = false;
+    }
 };
 
 void Graph::prim(string source)
 {
-    // int table[V];
-    // int i = vertexUtil[source];
-    // table[i] = 0;
+    int i = vertexUtil[source]; // Índice do vértice de origem
+    int E = edgeList.size();    // Número de arestas
+    int T = V - 1;              // Número de vértices menos o fonte
+
+    priority_queue<Edge> edgeQueue; // Fila de prioridade para as arestas
+    primUtil table[E];              // Tabela de controle
+    list<int> notInTree;            // Lista contendo os vértices que ainda não foram inseridos
+
+    for(int j=0; j<V; ++j)
+        if(j != i)
+            notInTree.push_back(j);
+
+    int aux;
+    for(auto it = vertexList[i].adj.begin(); it != vertexList[i].adj.end(); ++it)
+    {
+        aux = edgeUtil[it->label]; // Índice da aresta    
+        table[aux].visited = true;
+        edgeQueue.push(*it);
+    }
 }
