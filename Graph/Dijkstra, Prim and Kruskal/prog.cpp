@@ -1,10 +1,8 @@
 #include "graph.cpp"
 #include <fstream>
 #include <functional>
-#include <set>
 #include <cctype>
 
-using std::set;
 using std::ifstream;
 
 // Arquivo de entrada do grafo
@@ -17,14 +15,15 @@ Graph *g;
 void menu();        std::function<void()> M = menu;
 void leitura();     std::function<void()> L = leitura;
 void dijkstra();    std::function<void()> D = dijkstra;
-// void prim();        std::function<void()> P = prim;
+void prim();        std::function<void()> P = prim;
 // void kruskal();     std::function<void()> K = kruskal;
 
 // Mapa de ponteiros
-map<char, std::function<void()> > function{{'M', M}, {'L', L}, {'D', D}};
+map<char, std::function<void()> > function{{'M', M}, {'L', L}, {'D', D}, {'P', P}};
 
 int main()
 {
+    cout << "Desenvolvido por: Daniel de Almeida Cruz da Cunha - 158943@upf.br\n";
     char option;
     set<char> validOptions{'L', 'D', 'P', 'K', 'M'};
 
@@ -90,7 +89,14 @@ void dijkstra()
 }
 
 // Chama o método Prim
-// void prim();
+void prim()
+{
+    string source;
+    cout << "Origem: ";
+    cin  >> source;
+
+    g->prim(source);
+}
 
 // Chama o método Kruskal
 // void kruskal();
