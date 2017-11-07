@@ -1,6 +1,7 @@
 // Algoritmo feito com o intuito de validar as funções do grafo
 #include "graph.cpp"
 #include <cassert>
+#include <cstdio>
 
 int main()
 {
@@ -9,72 +10,56 @@ int main()
     g.addVertex(1, "bb");
     g.addVertex(2, "cc");
     g.addVertex(3, "dd");
-    g.addEdge("V0", "aa", "bb", 10);
-    g.addEdge("V1", "aa", "dd", 15);
-    g.addEdge("V2", "aa", "cc", 20);
-    g.addEdge("V3", "bb", "cc", 25);
-    g.addEdge("V4", "cc", "dd", 30);
-
-    // Valida os índices
-    assert(g.indexUtil["aa"] == 0);
-    assert(g.indexUtil["bb"] == 1);
-    assert(g.indexUtil["cc"] == 2);
-    assert(g.indexUtil["dd"] == 3);
-    assert(g.list[0].index == 0);
-    assert(g.list[1].index == 1);
-    assert(g.list[2].index == 2);
-    assert(g.list[3].index == 3);
-
-    // Valida os rótulos
-    assert(g.list[0].label == "aa");
-    assert(g.list[1].label == "bb");
-    assert(g.list[2].label == "cc");
-    assert(g.list[3].label == "dd");
-
-    // Valida o tamanho das listas de adjacência
-    assert(g.list[0].adj.size() == 3);
-    assert(g.list[1].adj.size() == 2);
-    assert(g.list[2].adj.size() == 3);
-    assert(g.list[3].adj.size() == 2);
-
-    // Valida as arestas
-    assert(g.list[0].adj.front().label == "V0");
-    assert(g.list[0].adj.front().d == g.indexUtil["bb"]);
-    assert(g.list[0].adj.front().w == 10);
-    assert(g.list[1].adj.front().label == "V0");
-    assert(g.list[1].adj.front().d == g.indexUtil["aa"]);
-    assert(g.list[1].adj.front().w == 10);
     
-    auto it = g.list[0].adj.begin(); it++;
-    assert(it->label == "V1");
-    assert(it->d == g.indexUtil["dd"]);
-    assert(it->w == 15);
-    assert(g.list[3].adj.front().label == "V1");
-    assert(g.list[3].adj.front().d == g.indexUtil["aa"]);
-    assert(g.list[3].adj.front().w == 15);
-    
-    assert(g.list[0].adj.back().label == "V2");
-    assert(g.list[0].adj.back().d == g.indexUtil["cc"]);
-    assert(g.list[0].adj.back().w == 20);
-    assert(g.list[2].adj.front().label == "V2");
-    assert(g.list[2].adj.front().d == g.indexUtil["aa"]);
-    assert(g.list[2].adj.front().w == 20);
+    assert(g.vertexUtil["aa"] == 0);
+    assert(g.vertexUtil["bb"] == 1);
+    assert(g.vertexUtil["cc"] == 2);
+    assert(g.vertexUtil["dd"] == 3);
 
-    assert(g.list[1].adj.back().label == "V3");
-    assert(g.list[1].adj.back().d == g.indexUtil["cc"]);
-    assert(g.list[1].adj.back().w == 25);
-    it = g.list[2].adj.begin(); it++;
-    assert(it->label == "V3");
-    assert(it->d == g.indexUtil["bb"]);
-    assert(it->w == 25);
-    
-    // g.addEdge("V4", "cc", "dd", 30);
-    assert(g.list[2].adj.back().label == "V4");
-    assert(g.list[2].adj.back().d == g.indexUtil["dd"]);
-    assert(g.list[2].adj.back().w == 30);
-    assert(g.list[3].adj.back().label == "V4");
-    assert(g.list[3].adj.back().d == g.indexUtil["cc"]);
-    assert(g.list[3].adj.back().w == 30);    
+    g.addEdge(0, "V0", "aa", "bb", 5);
+    g.addEdge(1, "V1", "aa", "cc", 12);
+    g.addEdge(2, "V2", "aa", "dd", 9);
+    g.addEdge(3, "V3", "bb", "cc", 2);
+    g.addEdge(4, "V4", "bb", "dd", 3);
+    g.addEdge(5, "V5", "cc", "dd", 11);
+
+    assert(g.edgeUtil["V0"] == 0);
+    assert(g.edgeList[0].label == "V0");
+    assert(g.edgeList[0].w == 5);
+    assert(g.edgeList[0].o == g.vertexUtil["aa"]);
+    assert(g.edgeList[0].d == g.vertexUtil["bb"]);
+
+    assert(g.edgeUtil["V1"] == 1);
+    assert(g.edgeList[1].label == "V1");
+    assert(g.edgeList[1].w == 12);
+    assert(g.edgeList[1].o == g.vertexUtil["aa"]);
+    assert(g.edgeList[1].d == g.vertexUtil["cc"]);
+
+    assert(g.edgeUtil["V2"] == 2);
+    assert(g.edgeList[2].label == "V2");
+    assert(g.edgeList[2].w == 9);
+    assert(g.edgeList[2].o == g.vertexUtil["aa"]);
+    assert(g.edgeList[2].d == g.vertexUtil["dd"]);
+
+    assert(g.edgeUtil["V3"] == 3);
+    assert(g.edgeList[3].label == "V3");
+    assert(g.edgeList[3].w == 2);
+    assert(g.edgeList[3].o == g.vertexUtil["bb"]);
+    assert(g.edgeList[3].d == g.vertexUtil["cc"]);
+
+    assert(g.edgeUtil["V4"] == 4);
+    assert(g.edgeList[4].label == "V4");
+    assert(g.edgeList[4].w == 3);
+    assert(g.edgeList[4].o == g.vertexUtil["bb"]);
+    assert(g.edgeList[4].d == g.vertexUtil["dd"]);
+
+    assert(g.edgeUtil["V5"] == 5);
+    assert(g.edgeList[5].label == "V5");
+    assert(g.edgeList[5].w == 11);
+    assert(g.edgeList[5].o == g.vertexUtil["cc"]);
+    assert(g.edgeList[5].d == g.vertexUtil["dd"]);
+
+    printf("OK\n");
 
     return 0;
 }
