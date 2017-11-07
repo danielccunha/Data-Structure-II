@@ -51,7 +51,7 @@ struct Edge
 
     bool operator<(const Edge& tmp) const
     {
-        return w > tmp.w;
+        return w > tmp.w || (w == tmp.w && label > tmp.label);
     }
 };
 
@@ -64,6 +64,7 @@ protected:
     Edge getNewEdge(string label, int origin, int destiny, int weight); // Função auxiliar para adicionar uma aresta ao grafo
     int  shorterDist(dijkstraUtil table[]); // Função auxiliar para encontrar o índice não finalizado com menor custo da tabela no algoritmo de dijkstra
     void printMST(int root, list<int> table[], int space);  // Imprime a MST
+    void printMSTTable(int root, list<int> table[]);        // Imprime a tabela de arestas
 
 public:
     vector<Vertex> vertexList;   // Lista de vértices
@@ -199,7 +200,7 @@ void Graph::prim(string source)
 {
     int i = vertexUtil[source], j;  // Índice do vértice de origem
     int E = edgeList.size();        // Número de arestas
-    bool table[E];
+    bool table[E];                  // Tabela de arestas que já foram visitadas
     for(j = 0; j < E; ++j) table[j] = false;
 
     priority_queue<Edge> edgeQueue; // Fila de prioridade para as arestas
@@ -211,19 +212,24 @@ void Graph::prim(string source)
             notInTree.insert(j);
 
     // Adiciona as arestas do vértice de origem na fila
+    // E os marca como visitadas na tabela
     for(auto it = vertexList[i].adj.begin(); it != vertexList[i].adj.end(); ++it)
     {
         table[ edgeUtil[it->label] ] = true;
         edgeQueue.push(*it);
     }
 
-    // Declara o vértice origem como raiz da árvore
+    // Declara o vértice origem como raiz da árvore e 0 como o custo da MST
     int root   = i;
     int weight = 0;
+
     // Cria uma lista de inteiros para armazenar a MST
     list<int> MST[V];
 
-    // Enquanto houver vértice fora da árvore
+    // Cria uma lista de inteiros para armazenar os índices das arestas presentes na MST
+    list<int> edgesMST;
+
+    // Enquanto houver vértice fora da árvore (considerando que o grafo seja um grafo conexo)
     while(!notInTree.empty())
     {
         // Pega a aresta do topo da lista
@@ -243,6 +249,8 @@ void Graph::prim(string source)
             MST[i].push_back(j);
             notInTree.erase(j);
             weight += edge.w;
+
+            edgesMST.push_back( edgeUtil[ edge.label ] );
             // Adiciona as arestas do vértice de origem na fila
             // Apenas irá adicionar as arestas que ainda não foram adicionadas (pelo seu destino)
             for(auto it = vertexList[j].adj.begin(); it != vertexList[j].adj.end(); ++it)
@@ -258,7 +266,22 @@ void Graph::prim(string source)
     // Imprime a MST
     cout << "\nMétodo de Prim. Vértice fonte: " << source << endl;
     cout << "Peso da MST: " << weight << endl;
+    
+    // Impressão da árvore
     printMST(root, MST, 0);
+
+    // Ordena as arestas pelo seu índice
+    edgesMST.sort();
+
+    // Imprime a tabela de arestas
+    cout << "\n\nTabela de arestas:\n";
+    cout << "Rótulo\tVértices\tPeso\n";
+
+    for(auto it = edgesMST.begin(); it != edgesMST.end(); ++it)
+    {
+        auto edge = edgeList[*it];
+        cout << edge.label << "\t(\"" << edge.o << "\", \"" << edge.d << "\")\t " << edge.w << "\n";
+    }
 }
 
 void Graph::printMST(int root, list<int> table[], int space)
@@ -273,4 +296,3 @@ void Graph::printMST(int root, list<int> table[], int space)
         printMST(*it, table, space);
     }
 }
-
