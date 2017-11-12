@@ -16,10 +16,10 @@ void menu();        std::function<void()> M = menu;
 void leitura();     std::function<void()> L = leitura;
 void dijkstra();    std::function<void()> D = dijkstra;
 void prim();        std::function<void()> P = prim;
-// void kruskal();     std::function<void()> K = kruskal;
+void kruskal();     std::function<void()> K = kruskal;
 
 // Mapa de ponteiros
-map<char, std::function<void()> > function{{'M', M}, {'L', L}, {'D', D}, {'P', P}};
+map<char, std::function<void()> > function{{'M', M}, {'L', L}, {'D', D}, {'P', P}, {'K', K}};
 
 int main()
 {
@@ -30,7 +30,8 @@ int main()
     menu();
     while(cout << "\nOpção: " && cin >> option && option != 'F' && option != 'f')
     {
-        option = toupper(option);
+        if(islower(option)) option = toupper(option);
+        
         if(!validOptions.count(option)) // Caso o caracter lido não for encontrado no Set
             cout << "Opção inválida.\n";
         else
@@ -99,4 +100,7 @@ void prim()
 }
 
 // Chama o método Kruskal
-// void kruskal();
+void kruskal()
+{
+    g->kruskal();
+}
